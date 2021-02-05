@@ -7,6 +7,7 @@ import Screen from '../components/Screen';
 import AppTextInput from '../components/AppTextInput';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
+import ErrorMessage from '../components/ErrorMessage';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().required().email().label("Email"),
@@ -25,26 +26,28 @@ export default function LoginScreen(props) {
                 onSubmit={values => console.log(values)}
                 validationSchema={validationSchema}
             >
-                { ({ handleChange, handleSubmit, errors }) => (
+                { ({ handleChange, handleSubmit, errors, setFieldTouched, touched }) => (
                     <>
                         <AppTextInput
                             autoCapitalize="none"
                             autoCorrect={false}
                             icon="email"
                             keyboardType="email-address"
+                            onBlur={() => setFieldTouched("email")}
                             onChangeText={handleChange("email")}
                             textContentType="emailAddress"
                             placeholder="Email" />
-                        <AppText style={{ color: 'red' }}>{errors.email}</AppText>
+                        <ErrorMessage error={errors.email} visible={touched.email} />
                         <AppTextInput
                             autoCapitalize="none"
                             autoCorrect={false}
                             icon="lock"
+                            onBlur={() => setTouchField("password")}
                             placeholder="Password"
                             onChangeText={handleChange("password")}
                             textContentType="password"
                             secureTextEntry />
-                        <AppText style={{ color: 'red' }}>{errors.password}</AppText>
+                        <ErrorMessage error={errors.password} visible={touched.password} />
                         <AppButton title="Login" onPress={handleSubmit} />
                     </>
                 )}
